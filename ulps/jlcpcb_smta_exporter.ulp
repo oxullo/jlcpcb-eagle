@@ -73,11 +73,17 @@ if (board) board(B) {
 
         for (int i = 0 ; i < element_count ; ++i) {
             UL_ELEMENT E = selected_elements[i];
-
+            int angle = E.angle;
+            if (layer_name_map[layer_choice] == "Bottom") {
+              angle = (360 - angle);
+              angle = angle + 180;
+              angle = angle % 360;
+            }
+            real ang = angle;
             printf("%s,%5.2f,%5.2f,%s,%.1f\n",
                 E.name, u2mm(E.x), u2mm(E.y),
                 layer_name_map[layer_choice],
-                E.angle);
+                ang);
         }
     }
 
