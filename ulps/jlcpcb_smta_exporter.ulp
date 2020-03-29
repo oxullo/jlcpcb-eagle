@@ -126,6 +126,9 @@ if (board) board(B) {
                 }
             }
         }
+        if (current_value != "") {
+          printf("%s,%s,%s,%s\n", current_value, designators, current_footprint, current_lscpart);
+        }
     }
 
   dlgMessageBox("BOM and CPL files have been exported to: " + output_dir, "OK");
