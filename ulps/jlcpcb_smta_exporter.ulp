@@ -120,6 +120,21 @@ if (board) board(B) {
             current_footprint = E.footprint.name;
             current_lscpart = "";
 
+            while (strstr(current_value, ",") >= 0) {  // convert commas to spaces
+                string substitution_string = " ";
+                sprintf(current_value, "%s%s%s", strsub(current_value, 0, strstr(current_value, ",")), substitution_string, strsub(current_value, strstr(current_value, ",")+1));
+            }
+
+            while (strstr(current_footprint, ",") >= 0) {  // convert commas to spaces
+                string substitution_string = " ";
+                sprintf(current_footprint, "%s%s%s", strsub(current_footprint, 0, strstr(current_footprint, ",")), substitution_string, strsub(current_footprint, strstr(current_footprint, ",")+1));
+            }
+
+            while (strstr(current_lscpart, ",") >= 0) {  // convert commas to spaces
+                string substitution_string = " ";
+                sprintf(current_lscpart, "%s%s%s", strsub(current_lscpart, 0, strstr(current_lscpart, ",")), substitution_string, strsub(current_lscpart, strstr(current_lscpart, ",")+1));
+            }
+
             E.attributes(A) {
                 if (A.name == "LCSC_PART") {
                     current_lscpart = A.value;
