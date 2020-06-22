@@ -31,6 +31,16 @@ int layer_id_map[] = { 1, 16 };
 UL_ELEMENT selected_elements[];
 string layer_name_map[] = { "Top", "Bottom" };
 
+string replace_commas(string s)
+{
+    while (strstr(s, ",") >= 0) {  // convert commas to spaces
+        string substitution_string = " ";
+        sprintf(s, "%s%s%s", strsub(s, 0, strstr(s, ",")), substitution_string, strsub(s, strstr(s, ",")+1));
+    }
+
+    return s;
+}
+
 if (board) board(B) {
 
     string txt;
@@ -116,13 +126,13 @@ if (board) board(B) {
                 designators += " ";
             }
             designators += E.name;
-            current_value = E.value;
-            current_footprint = E.footprint.name;
+            current_value = replace_commas(E.value);
+            current_footprint = replace_commas(E.footprint.name);
             current_lscpart = "";
 
             E.attributes(A) {
                 if (A.name == "LCSC_PART") {
-                    current_lscpart = A.value;
+                    current_lscpart = replace_commas(A.value);
                 }
             }
         }
