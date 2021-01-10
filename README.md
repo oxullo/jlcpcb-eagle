@@ -45,5 +45,6 @@ Observe the following:
 4. the two files will be named ```<boardname>_<side>_bom.csv``` and ```<boardname>_<side>_cpl.csv```
 5. components rotations are sketchy and must be visually checked on the online gerber viewer once uploaded the files
 
-The ULP can extract LCSC part ordering numbers from the packages attributes. The attribute must be named _LCSC_PART_ 
-and it should contain the order code found in the parts library https://jlcpcb.com/client/index.html#/parts (eg: C25804).
+The ULP can extract LCSC part ordering numbers from the packages attributes. The attribute must be named _LCSC_PART_ or _LCSC_ and it should contain the order code found in the parts library https://jlcpcb.com/client/index.html#/parts (eg: C25804).
+
+The ULP can also manually rotate the angle in the CPL output file. The attribute must be named _JLC_ROTATION_. For example, if a part's angle in set to 90 and it's attribute _JLC_ROTATION_ is set to 180, the angle in the final CPL file will be set to 270.
