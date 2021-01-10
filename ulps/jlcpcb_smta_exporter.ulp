@@ -111,14 +111,14 @@ if (board) board(B) {
 
         string current_value = "";
         string current_footprint = "";
-        string current_lscpart = "";
+        string current_lcscpart = "";
         string designators = "";
 
         for (i = 0 ; i < element_count ; ++i) {
             UL_ELEMENT E = selected_elements[indexes[i]];
 
             if (current_value != "" && (E.value != current_value || E.footprint.name != current_footprint)) {
-                printf("%s,%s,%s,%s\n", current_value, designators, current_footprint, current_lscpart);
+                printf("%s,%s,%s,%s\n", current_value, designators, current_footprint, current_lcscpart);
                 designators = "";
             }
 
@@ -128,16 +128,16 @@ if (board) board(B) {
             designators += E.name;
             current_value = replace_commas(E.value);
             current_footprint = replace_commas(E.footprint.name);
-            current_lscpart = "";
+            current_lcscpart = "";
 
             E.attributes(A) {
-                if (A.name == "LCSC_PART") {
-                    current_lscpart = replace_commas(A.value);
+                if (A.name == "LCSC_PART" || A.name == "LCSC") {
+                    current_lcscpart = replace_commas(A.value);
                 }
             }
         }
         if (current_value != "") {
-          printf("%s,%s,%s,%s\n", current_value, designators, current_footprint, current_lscpart);
+          printf("%s,%s,%s,%s\n", current_value, designators, current_footprint, current_lcscpart);
         }
     }
 
