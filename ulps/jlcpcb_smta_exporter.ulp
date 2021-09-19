@@ -41,6 +41,45 @@ string replace_commas(string s)
     return s;
 }
 
+// Borrowed from e-brueckenklemmenverwaltung.ulp
+string strip(string s)
+{
+    int i, n;
+    string t;
+
+    while (s && isspace(s[0])) {
+        s = strsub(s, 1);
+    }
+
+    while (s && isspace(s[strlen(s) - 1])) {
+        s = strsub(s, 0, strlen(s) - 1);
+    }
+
+    for (i = 0; i < strlen(s); i++) {
+        if (!isspace(s[i])) {
+            t[n++] = s[i];
+        } else {
+            if ((strlen(s) > i+1) && isspace(s[i+1]));
+            else t[n++] = s[i];
+        }
+    }
+
+    s = t;
+
+    return s;
+}
+
+string get_lcsc_part(UL_ELEMENT E)
+{
+    E.attributes(A) {
+        if (A.name == "LCSC_PART" || A.name == "LCSC") {
+            return replace_commas(A.value);
+        }
+    }
+    return "";
+}
+
+
 if (board) board(B) {
 
     string txt;
@@ -67,7 +106,8 @@ if (board) board(B) {
     // Gather the components that will appear in BOM/CPL
     B.elements(E) if (E.populate) {
         E.package.contacts(C) {
-            if ((C.smd && C.smd.layer == layer_id_map[layer_choice]) || (!C.smd && export_th && E.mirror == layer_choice)) {
+            if ((C.smd && C.smd.layer == layer_id_map[layer_choice])
+                    || (!C.smd && export_th && E.mirror == layer_choice)) {
                 selected_elements[element_count++] = E;
                 break;
             }
@@ -121,43 +161,32 @@ if (board) board(B) {
             values[i] = selected_elements[i].value;
         }
         sort(element_count, indexes, values);
+
+        // Header
         printf("Comment,Designator,Footprint,LCSC Part #\n");
 
-        string current_value = "";
-        string current_footprint = "";
-        string current_lcscpart = "";
-        string designators = "";
-
+        string designators;
         for (i = 0 ; i < element_count ; ++i) {
             UL_ELEMENT E = selected_elements[indexes[i]];
+            string lcsc_part = get_lcsc_part(E);
 
-            if (current_value != "" && (E.value != current_value || E.footprint.name != current_footprint)) {
-                printf("%s,%s,%s,%s\n", current_value, designators, current_footprint, current_lcscpart);
+            // Elements with no values aren't aggregated
+            if (strip(E.value) == "") {
+                printf("%s,%s,%s,%s\n", "", replace_commas(E.name), replace_commas(E.footprint.name), lcsc_part);
+                designators = "";
+            } else if (i < element_count - 1 && E.value == selected_elements[indexes[i + 1]].value) {
+                designators += " " + replace_commas(E.name);
+            } else {
+                designators += " " + replace_commas(E.name);
+                printf("%s,%s,%s,%s\n", replace_commas(E.value), strip(designators), replace_commas(E.footprint.name), lcsc_part);
                 designators = "";
             }
-
-            if (designators != "") {
-                designators += " ";
-            }
-            designators += E.name;
-            current_value = replace_commas(E.value);
-            current_footprint = replace_commas(E.footprint.name);
-            current_lcscpart = "";
-
-            E.attributes(A) {
-                if (A.name == "LCSC_PART" || A.name == "LCSC") {
-                    current_lcscpart = replace_commas(A.value);
-                }
-            }
-        }
-        if (current_value != "") {
-          printf("%s,%s,%s,%s\n", current_value, designators, current_footprint, current_lcscpart);
         }
     }
 
-  dlgMessageBox("BOM and CPL files have been exported to: " + output_dir, "OK");
+    dlgMessageBox("BOM and CPL files have been exported to: " + output_dir, "OK");
 
 } else {
-  dlgMessageBox("Run this ULP from a Board", "OK");
-  exit (0);
+    dlgMessageBox("Run this ULP from a Board", "OK");
+    exit (0);
 }
