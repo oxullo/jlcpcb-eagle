@@ -65,19 +65,14 @@ if (board) board(B) {
     int element_count = 0;
 
     // Gather the components that will appear in BOM/CPL
-output("/tmp/debug.txt") {
     B.elements(E) if (E.populate) {
         E.package.contacts(C) {
-            if (!C.smd) {
-                printf("Contact: '%s', (%f %f)\n", C.name, u2mm(C.x), u2mm(C.y));
-            }
-            if ((C.smd && C.smd.layer == layer_id_map[layer_choice])) {
+            if ((C.smd && C.smd.layer == layer_id_map[layer_choice]) || (!C.smd && export_th && E.mirror == layer_choice)) {
                 selected_elements[element_count++] = E;
                 break;
             }
         }
     }
-}
 
     string base_path = (output_dir + "/" +
         strsub(filename(B.name), 0, strlen(filename(B.name)) - 4) +
