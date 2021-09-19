@@ -19,7 +19,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 #usage "<b>JLCPCB BOM/CPL files generator</b>\n"
        "<p>"
-       "Generates BOM and CPL files for JLCPCB SMT assembly service"
+       "Generates BOM and CPL files for JLCPCB SMT/TH assembly service"
        "https://jlcpcb.com/smt-assembly"
        "<p>"
        "Run the ULP from the board editor"
@@ -45,12 +45,14 @@ if (board) board(B) {
 
     string txt;
     int layer_choice = 0;
+    int export_th = 1;
 
-    dlgDialog("Layer selection") {
+    dlgDialog("Export selection") {
         dlgGroup("Export layer") {
             dlgRadioButton("&Top", layer_choice);
             dlgRadioButton("&Bottom", layer_choice);
         }
+        dlgCheckBox("&Export also TH components", export_th);
         dlgPushButton("OK") dlgAccept();
     };
 
@@ -62,14 +64,20 @@ if (board) board(B) {
 
     int element_count = 0;
 
+    // Gather the components that will appear in BOM/CPL
+output("/tmp/debug.txt") {
     B.elements(E) if (E.populate) {
         E.package.contacts(C) {
-            if (C.smd && C.smd.layer == layer_id_map[layer_choice]) {
+            if (!C.smd) {
+                printf("Contact: '%s', (%f %f)\n", C.name, u2mm(C.x), u2mm(C.y));
+            }
+            if ((C.smd && C.smd.layer == layer_id_map[layer_choice])) {
                 selected_elements[element_count++] = E;
                 break;
             }
         }
     }
+}
 
     string base_path = (output_dir + "/" +
         strsub(filename(B.name), 0, strlen(filename(B.name)) - 4) +
