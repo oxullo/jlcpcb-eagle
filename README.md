@@ -17,6 +17,7 @@ Copy each file in their respective folders (USER_HOME/Documents/EAGLE/).
 ## CAM jobs
 
 * cam/jlcpcb-2layers.cam: 2-layers version
+* cam/jlcpcb-4layers.cam: 4-layers version
 
 The jobs follow the naming guidelines defined here: https://support.jlcpcb.com/article/29-suggested-naming-patterns
 They also include tCream/bCream solderpaste layers that could be used for the stencil service.
