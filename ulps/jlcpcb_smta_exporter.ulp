@@ -29,7 +29,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 int layer_id_map[] = { 1, 16 };
 UL_ELEMENT selected_elements[];
-string layer_name_map[] = { "Top", "Bottom" };
 
 string replace_commas(string s)
 {
