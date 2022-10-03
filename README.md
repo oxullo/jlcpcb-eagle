@@ -24,6 +24,7 @@ They also include tCream/bCream solderpaste layers that could be used for the st
 ## Design rules
 
 * design rules/jlcpcb-2layers.dru: 2-layers version, 35u copper, 1.6mm board thickness
+* design rules/jlcpcb-4layers.dru: 4-layers version, 35u/17.5u copper, 1.6mm board thickness
 
 Mainly based on EAGLE's standard design rules, it adds the declared JLCPCB's capabilities listed
 here: https://jlcpcb.com/capabilities/Capabilities
