@@ -152,12 +152,14 @@ if (board) board(B) {
         int i;
         int indexes[];
         numeric string values[];
+        numeric string footprints[];
 
         for (i=0 ; i < element_count ; ++i) {
             indexes[i] = i;
             values[i] = selected_elements[i].value;
+            footprints[i] = selected_elements[i].footprint.name;
         }
-        sort(element_count, indexes, values);
+        sort(element_count, indexes, values, footprints);
 
         // Header
         printf("Comment,Designator,Footprint,LCSC Part #\n");
@@ -167,11 +169,14 @@ if (board) board(B) {
             UL_ELEMENT E = selected_elements[indexes[i]];
             string lcsc_part = get_lcsc_part(E);
 
-            // Elements with no values aren't aggregated
             if (strip(E.value) == "") {
+                // Elements with no values aren't aggregated
                 printf("%s,%s,%s,%s\n", "", replace_commas(E.name), replace_commas(E.footprint.name), lcsc_part);
                 designators = "";
-            } else if (i < element_count - 1 && E.value == selected_elements[indexes[i + 1]].value) {
+            } else if (i < element_count - 1
+                    && E.value == selected_elements[indexes[i + 1]].value
+                    && E.footprint.name == selected_elements[indexes[i + 1]].footprint.name) {
+                // Split elements that have different value or package
                 designators += " " + replace_commas(E.name);
             } else {
                 designators += " " + replace_commas(E.name);
