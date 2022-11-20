@@ -91,6 +91,15 @@ string get_lcsc_part(UL_ELEMENT E)
     return "";
 }
 
+int is_dnp(UL_ELEMENT E)
+{
+    E.attributes(A) {
+        if (A.name == "DNP") {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 if (board) board(B) {
 
@@ -103,7 +112,7 @@ if (board) board(B) {
     int element_count = 0;
 
     // Gather the components that will appear in BOM/CPL
-    B.elements(E) if (E.populate) {
+    B.elements(E) if (E.populate && !is_dnp(E)) {
         E.package.contacts(C) {
             if (C.smd || C.pad) {
                 selected_elements[element_count++] = E;

@@ -52,3 +52,7 @@ The ULP can also manually rotate the angle in the CPL output file. The attribute
 
 Top and/or bottom assembly can be chosen directly during the ordering process, JLCPCB will use the CPL file to determine which side the
 designator has been placed on.
+
+In case a part should not be exported into the BOM/CPL, add an attribute called "DNP" (the value
+is not relevant and can be an annotation for the reason for the exclusion). The POPULATE flag is
+also taken into consideration for filtering out parts that shouldn't be part of a specific variant.
