@@ -146,10 +146,6 @@ if (board) board(B) {
                 }
             }
 
-            if (layer == "Bottom") {
-                angle += 180;
-            }
-
             printf("%s,%5.2f,%5.2f,%s,%.1f\n",
                 E.name, u2mm(E.x), u2mm(E.y),
                 layer,
